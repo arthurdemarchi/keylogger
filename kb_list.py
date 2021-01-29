@@ -64,7 +64,9 @@ def kbevent(event):
 def allow_entrance(card):
     try:
         r = requests.get('http://localhost:5000/api/v1/resources/search?badge=' + str(card))
-        print(r)
+        pid = r.json['pid']
+        print("Seu pid é: ", pid)
+        
     except Exception as e:
         print('INFO: Request Failed')
         print('EXCEPTION: ', e)
