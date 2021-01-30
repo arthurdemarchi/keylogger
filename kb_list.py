@@ -3,6 +3,7 @@ import pyxhook
 from datetime import datetime
 import time
 import requests
+import traceback 
 
 # global settings
 RESET_READING_TIMEOUT = 1
@@ -64,12 +65,13 @@ def kbevent(event):
 def allow_entrance(card):
     try:
         r = requests.get('http://localhost:5000/api/v1/resources/search?badge=' + str(card))
-        pid = r.json['pid']
+        r_json = r.json()
+        pid = r_json[0]['pid']
         print("Seu pid é: ", pid)
-        
+
     except Exception as e:
         print('INFO: Request Failed')
-        print('EXCEPTION: ', e)
+        print('EXCEPTION: ', traceback.print_exc())
         return
 
     return
