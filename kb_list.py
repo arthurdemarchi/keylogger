@@ -66,7 +66,7 @@ def allow_entrance(card):
     try:
         r = requests.get('http://localhost:5000/api/v1/resources/search?badge=' + str(card))
         r = r.json()
-        r = requests.post("https://webhook.site/374dcafe-4c83-47db-8a3e-a6d81b8f0125", data=r['pid'])
+        r = requests.post("https://webhook.site/374dcafe-4c83-47db-8a3e-a6d81b8f0125", data={'pid' : r['pid']})
     except Exception as e:
         print('INFO: Request Failed')
         print('EXCEPTION: ', traceback.print_exc())
