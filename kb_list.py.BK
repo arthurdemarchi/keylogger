@@ -1,6 +1,5 @@
 # libraries needed
-#import pyxhook
-import keyboard
+import pyxhook
 from datetime import datetime
 import time
 import requests
@@ -23,7 +22,7 @@ running = True
 end_reading = False
 
 # callback function when key is stroked
-def kb_callback(event):
+def kbevent(event):
     """function that concatanates last stroked
         key into global variable keyboard_stream.
         
@@ -32,6 +31,7 @@ def kb_callback(event):
         it replaces the global variable card_data and 
         raises the end_reading flag.
     """
+
     try:
         #inserting global variables in this scope
         global CARD_DATA_LENGTH
@@ -42,7 +42,7 @@ def kb_callback(event):
         global keyboard_stream
 
         #insert key into card id
-        keyboard_stream = keyboard_stream + str(event.name)
+        keyboard_stream = keyboard_stream + chr(event.Ascii)
 
         #if card maximum length s reached terminates current reading
         if len(keyboard_stream) >= CARD_DATA_LENGTH:
@@ -131,8 +131,16 @@ def main():
     global keyboard_stream
 
     # Create hookmanager
-    keyboard.on_press(kb_callback)
+    hookman = pyxhook.HookManager()
 
+    # Define our callback to fire when a key is pressed down
+    hookman.KeyDown = kbevent
+
+    # Hook the keyboard
+    hookman.HookKeyboard()
+
+    # Start our listener
+    hookman.start()
 
     ### BODY
     # Create a loop to keep the application running
@@ -170,7 +178,7 @@ def main():
 
     ### CLOSING
     # Close the listener when loop is donne
-    keyboard.unhook_all()
+    hookman.cancel()
 
 #call main
 main()
